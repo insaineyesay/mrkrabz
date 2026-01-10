@@ -3,8 +3,7 @@
 A powerful command-line tool to search GitHub repositories with both CLI and interactive TUI modes, built with Rust and Octocrab.
 
 ![TUI Screenshot](image.png)
-
-<video controls src="Screen%20Recording%202026-01-10%20at%203.55.27%E2%80%AFPM.mov"></video>
+![Demo](mrkrabzdemo.gif)
 
 ## ✨ Features
 
