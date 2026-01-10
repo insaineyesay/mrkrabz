@@ -18,7 +18,7 @@ A powerful command-line tool to search GitHub repositories with both CLI and int
 ### Interactive TUI Mode (Default)
 Run without arguments to start the interactive mode:
 ```bash
-github-search-cli
+cargo run --
 ```
 
 **TUI Features:**
@@ -32,7 +32,7 @@ github-search-cli
 ### CLI Mode
 Provide a search query to use CLI mode:
 ```bash
-github-search-cli large rust game
+cargo run -- large rust game
 ```
 
 ### Prerequisites
@@ -69,10 +69,10 @@ sudo cp target/release/github-search-cli /usr/local/bin/
 
 ```bash
 # Start interactive mode
-github-search-cli
+cargo run --
 
 # Or specify options that will apply to searches
-github-search-cli -L rust --sort stars
+cargo run -- -L rust --sort stars
 ```
 
 In TUI mode:
@@ -86,39 +86,39 @@ In TUI mode:
 
 ```bash
 # Basic search
-github-search-cli large rust game
+cargo run -- large rust game
 
 # Limit results
-github-search-cli rust web framework -l 5
+cargo run -- rust web framework -l 5
 
 # Force CLI mode even without query
-github-search-cli --no-tui
+cargo run -- --no-tui
 ```
 
 ### Advanced filtering
 
 ```bash
 # Filter by language
-github-search-cli machine learning -L python
+cargo run -- machine learning -L python
 
 # Filter by minimum stars
-github-search-cli web scraper -s 1000
+cargo run -- web scraper -s 1000
 
 # Combine filters
-github-search-cli game engine -L rust -s 500 -l 10
+cargo run -- game engine -L rust -s 500 -l 10
 ```
 
 ### Sorting
 
 ```bash
 # Sort by stars (descending)
-github-search-cli neural network --sort stars
+cargo run -- neural network --sort stars
 
 # Sort by last updated
-github-search-cli cli tool --sort updated
+cargo run -- cli tool --sort updated
 
 # Sort by forks
-github-search-cli dotfiles --sort forks
+cargo run -- dotfiles --sort forks
 ```
 
 ### Using with GitHub Token
@@ -127,11 +127,11 @@ For higher rate limits (5000/hour vs 60/hour), use a GitHub Personal Access Toke
 
 ```bash
 # Method 1: Pass as argument
-github-search-cli rust game -t YOUR_TOKEN_HERE
+cargo run -- rust game -t YOUR_TOKEN_HERE
 
 # Method 2: Set environment variable
 export GITHUB_TOKEN=YOUR_TOKEN_HERE
-github-search-cli rust game
+cargo run -- rust game
 ```
 
 **To create a token:**
@@ -144,22 +144,22 @@ github-search-cli rust game
 
 ```bash
 # Find popular Rust games
-github-search-cli large rust game -s 100 --sort stars
+cargo run -- large rust game -s 100 --sort stars
 
 # Find Python data science projects
-github-search-cli data science -L python -s 1000 -l 15
+cargo run -- data science -L python -s 1000 -l 15
 
 # Find recently updated web frameworks
-github-search-cli web framework --sort updated -l 20
+cargo run -- web framework --sort updated -l 20
 
 # Find React component libraries
-github-search-cli react components -L javascript -s 500
+cargo run -- react components -L javascript -s 500
 ```
 
 ## Command-line Options
 
 ```
-Usage: github-search-cli [OPTIONS] [QUERY]...
+Usage: cargo run -- [OPTIONS] [QUERY]...
 
 Arguments:
   [QUERY]...  Search query (e.g., "large rust game"). Omit to start TUI mode.
