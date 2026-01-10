@@ -4,6 +4,8 @@ A powerful command-line tool to search GitHub repositories with both CLI and int
 
 ![TUI Screenshot](image.png)
 
+<video controls src="Screen%20Recording%202026-01-10%20at%203.55.27%E2%80%AFPM.mov"></video>
+
 ## ✨ Features
 
 - 🎨 **Interactive TUI Mode** - Beautiful terminal interface with live search and keyboard navigation
@@ -234,10 +236,6 @@ Potential features to add:
 - [ ] Save favorite searches
 - [ ] Export results to JSON/CSV
 - [ ] Search history with recall
-
-## License
-
-MIT
 
 ## Contributing
 
