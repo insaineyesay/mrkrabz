@@ -2,6 +2,8 @@
 
 A powerful command-line tool to search GitHub repositories with both CLI and interactive TUI modes, built with Rust and Octocrab.
 
+![TUI Screenshot](image.png)
+
 ## ✨ Features
 
 - 🎨 **Interactive TUI Mode** - Beautiful terminal interface with live search and keyboard navigation
@@ -69,7 +71,7 @@ sudo cp target/release/github-search-cli /usr/local/bin/
 
 ```bash
 # Start interactive mode
-cargo run --
+cargo run
 
 # Or specify options that will apply to searches
 cargo run -- -L rust --sort stars
