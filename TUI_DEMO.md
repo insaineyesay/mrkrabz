@@ -1,6 +1,6 @@
 # TUI Demo - Visual Preview
 
-This is what the GitHub Search TUI looks like in your terminal:
+This is what the Mr Krabz GitHub Search TUI looks like in your terminal:
 
 ## Initial Screen (Empty State)
 
@@ -14,7 +14,7 @@ This is what the GitHub Search TUI looks like in your terminal:
 ║                                                                       ║
 ║  ┌─ Results ─────────────────────────────────────────────────────────┐ ║
 ║  │                                                                   │ ║
-║  │              Welcome to GitHub Search! 👋                        │ ║
+║  │              Welcome to Mr Krabz GitHub Search! 👋                │ ║
 ║  │                                                                   │ ║
 ║  │   Type a search query and press Enter to search.                 │ ║
 ║  │   Examples: 'rust game', 'web framework', 'machine learning'     │ ║

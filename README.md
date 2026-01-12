@@ -1,4 +1,4 @@
-# GitHub Search CLI
+# Mr Krabz GitHub Search CLI
 
 A powerful command-line tool to search GitHub repositories with both CLI and interactive TUI modes, built with Rust and Octocrab.
 

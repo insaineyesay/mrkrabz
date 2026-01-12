@@ -282,7 +282,7 @@ pub fn ui(f: &mut Frame, app: &mut App) {
         let welcome_text = vec![
             Line::from(""),
             Line::from(Span::styled(
-                "Welcome to GitHub Search! 👋",
+                "Welcome to Mr Krabz GitHub Search! 👋",
                 Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
             )),
             Line::from(""),
