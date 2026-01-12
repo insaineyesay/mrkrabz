@@ -21,7 +21,7 @@ A powerful command-line tool to search GitHub repositories with both CLI and int
 ### Interactive TUI Mode (Default)
 Run without arguments to start the interactive mode:
 ```bash
-cargo run --
+cargo run
 ```
 
 **TUI Features:**
@@ -46,7 +46,7 @@ cargo run -- large rust game
 
 ```bash
 # Clone or create the project
-cd github-search-cli
+cd mrkrabz
 
 # Build the project
 cargo build --release
@@ -79,11 +79,13 @@ cargo run -- -L rust --sort stars
 ```
 
 In TUI mode:
-1. Type your search query (e.g., "web framework")
-2. Press **Enter** to search
-3. Use **↑/↓** to navigate results
-4. Press **Enter** on a result to open in browser
-5. Press **Esc** or **Ctrl+C** to quit
+1. Type your search query (e.g., "rust game")
+2. Press 1/2/3 to choose small, medium, or large repos. 
+3. Press **Enter** to search
+4. Press **Alt+F** to perform a file count (Currently Mac Only, Windows coming soon)
+5. Use **↑/↓** to navigate results
+6. Press **Alt+O** on a result to open in browser
+7. Press **Esc** or **Ctrl+C** to quit
 
 ### CLI Mode
 
