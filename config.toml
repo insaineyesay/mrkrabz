@@ -1,0 +1,12 @@
+# GitHub Search CLI Configuration
+
+# File count script selection
+# Options: "mac_zsh", "mac_bash", "windows"
+#
+# - "mac_zsh": Uses filecount.sh (default, recommended for macOS with zsh)
+# - "mac_bash": Uses mac_linux_bash_filecount.sh (for macOS/Linux with bash)
+# - "windows": Uses windows_filecount.ps1 (for Windows PowerShell)
+#
+# Note: The bash and Windows versions have not been fully tested.
+# Contributions and bug reports are welcome!
+filecount_script = "mac_zsh"

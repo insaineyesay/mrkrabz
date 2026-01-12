@@ -190,6 +190,25 @@ Options:
 | **Ctrl+C** | Quit |
 | **Any key** | Type in search box |
 
+## Configuration
+
+The tool supports different filecount scripts for different platforms. Create a `config.toml` file in the project root:
+
+```toml
+# Options: "mac_zsh", "mac_bash", "windows"
+filecount_script = "mac_zsh"
+```
+
+### Available Options:
+
+- **`mac_zsh`** (default) - Uses `filecount.sh` - Tested and recommended for macOS with zsh
+- **`mac_bash`** - Uses `mac_linux_bash_filecount.sh` - For macOS/Linux with bash (⚠️ untested)
+- **`windows`** - Uses `windows_filecount.ps1` - For Windows PowerShell (⚠️ untested)
+
+**Note:** The bash and Windows versions have not been fully tested. If you encounter issues, please open an issue or submit a PR with fixes. Contributions are welcome!
+
+If no `config.toml` is present, the tool defaults to `mac_zsh`.
+
 ## Development
 
 ### Run without building

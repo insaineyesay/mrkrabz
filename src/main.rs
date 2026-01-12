@@ -1,5 +1,6 @@
 // TUI module containing the terminal interface logic
 mod tui;
+mod config;
 
 use anyhow::Result;
 use clap::Parser;
@@ -326,11 +327,15 @@ async fn clone_repository(repo_url: &str) -> Result<String> {
     Ok(clone_path.display().to_string())
 }
 
-/// Clones a GitHub repository to a temp directory and runs filecount.sh
+/// Clones a GitHub repository to a temp directory and runs the configured filecount script
 /// Returns the script output as a string
 async fn clone_and_count_files(repo_url: &str) -> Result<String> {
     use std::process::Stdio;
     use tokio::process::Command;
+
+    // Load configuration to determine which script to use
+    let config = config::Config::load()?;
+    let script_name = config.get_filecount_script_path();
 
     // Create unique temp directory for this process
     let temp_dir = std::env::temp_dir().join(format!("github-search-{}", std::process::id()));
@@ -355,31 +360,51 @@ async fn clone_and_count_files(repo_url: &str) -> Result<String> {
         return Err(anyhow::anyhow!("Failed to clone repository"));
     }
 
-    // Copy filecount.sh to temp directory
-    let script_source = std::env::current_dir()?.join("filecount.sh");
-    let script_dest = clone_path.join("filecount.sh");
+    // Copy the configured filecount script to temp directory
+    let script_source = std::env::current_dir()?.join(&script_name);
+    let script_dest = clone_path.join(&script_name);
 
     if !script_source.exists() {
         std::fs::remove_dir_all(&temp_dir)?;
-        return Err(anyhow::anyhow!("filecount.sh not found in project root"));
+        return Err(anyhow::anyhow!("{} not found in project root", script_name));
     }
 
     std::fs::copy(&script_source, &script_dest)?;
 
-    // Make script executable
-    #[cfg(unix)]
-    {
-        use std::os::unix::fs::PermissionsExt;
-        let mut perms = std::fs::metadata(&script_dest)?.permissions();
-        perms.set_mode(0o755);
-        std::fs::set_permissions(&script_dest, perms)?;
-    }
+    // Determine command based on script type
+    let output = if script_name.ends_with(".ps1") {
+        // Windows PowerShell script
+        #[cfg(target_os = "windows")]
+        {
+            Command::new("powershell")
+                .arg("-ExecutionPolicy")
+                .arg("Bypass")
+                .arg("-File")
+                .arg(&script_dest)
+                .current_dir(&clone_path)
+                .output()
+                .await?
+        }
+        #[cfg(not(target_os = "windows"))]
+        {
+            std::fs::remove_dir_all(&temp_dir)?;
+            return Err(anyhow::anyhow!("PowerShell scripts can only be run on Windows"));
+        }
+    } else {
+        // Unix shell script
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            let mut perms = std::fs::metadata(&script_dest)?.permissions();
+            perms.set_mode(0o755);
+            std::fs::set_permissions(&script_dest, perms)?;
+        }
 
-    // Run filecount.sh
-    let output = Command::new("./filecount.sh")
-        .current_dir(&clone_path)
-        .output()
-        .await?;
+        Command::new(&format!("./{}", script_name))
+            .current_dir(&clone_path)
+            .output()
+            .await?
+    };
 
     // Clean up
     std::fs::remove_dir_all(&temp_dir)?;

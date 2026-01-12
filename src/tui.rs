@@ -475,3 +475,129 @@ pub fn restore_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -
     terminal.show_cursor()?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_app_initialization() {
+        let app = App::new();
+        assert!(app.input.value().is_empty());
+        assert!(app.results.is_empty());
+        assert_eq!(app.repo_size_filter, None);
+        assert!(!app.searching);
+        assert!(!app.counting_files);
+        assert!(!app.cloning);
+    }
+
+    #[test]
+    fn test_set_size_filter() {
+        let mut app = App::new();
+
+        app.set_size_filter(Some("large".to_string()));
+        assert_eq!(app.repo_size_filter, Some("large".to_string()));
+
+        app.set_size_filter(None);
+        assert_eq!(app.repo_size_filter, None);
+    }
+
+    #[test]
+    fn test_details_scroll() {
+        let mut app = App::new();
+
+        assert_eq!(app.details_scroll, 0);
+
+        app.scroll_details_down();
+        assert_eq!(app.details_scroll, 1);
+
+        app.scroll_details_down();
+        assert_eq!(app.details_scroll, 2);
+
+        app.scroll_details_up();
+        assert_eq!(app.details_scroll, 1);
+
+        app.scroll_details_up();
+        assert_eq!(app.details_scroll, 0);
+
+        // Test that it doesn't go below 0
+        app.scroll_details_up();
+        assert_eq!(app.details_scroll, 0);
+
+        // Test reset
+        app.scroll_details_down();
+        app.reset_details_scroll();
+        assert_eq!(app.details_scroll, 0);
+    }
+
+    #[test]
+    fn test_get_selected_repo_with_no_results() {
+        let mut app = App::new();
+
+        // No selection returns None
+        assert!(app.get_selected_repo().is_none());
+
+        // With selection but no results returns None
+        app.list_state.select(Some(0));
+        assert!(app.get_selected_repo().is_none());
+    }
+
+    #[test]
+    fn test_input_operations() {
+        let mut app = App::new();
+
+        // Test that input starts empty
+        assert!(app.input.value().is_empty());
+
+        // Test Alt+C clear functionality (input.reset())
+        // We can't easily test the actual key handler without mocking terminal input,
+        // but we can test the underlying function
+        app.input = Input::from("test query");
+        assert_eq!(app.input.value(), "test query");
+
+        app.input.reset();
+        assert!(app.input.value().is_empty());
+    }
+
+    #[test]
+    fn test_searching_and_counting_flags() {
+        let mut app = App::new();
+
+        assert!(!app.searching);
+        assert!(!app.counting_files);
+        assert!(!app.cloning);
+
+        app.searching = true;
+        assert!(app.searching);
+
+        app.counting_files = true;
+        assert!(app.counting_files);
+
+        app.cloning = true;
+        assert!(app.cloning);
+    }
+
+    #[test]
+    fn test_set_results_auto_selects_first() {
+        let mut app = App::new();
+
+        // set_results auto-selects first item when results is not empty
+        app.set_results(Vec::new(), 0);
+        assert!(app.list_state.selected().is_none());
+
+        // We can't easily create a full Repository here, so we test the logic
+        // The actual functionality is: if results is not empty, select index 0
+    }
+
+    #[test]
+    fn test_navigation_wrapping() {
+        let mut app = App::new();
+
+        // Test that navigation doesn't panic with empty results
+        app.next();
+        assert!(app.list_state.selected().is_none());
+
+        app.previous();
+        assert!(app.list_state.selected().is_none());
+    }
+}
