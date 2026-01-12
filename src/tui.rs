@@ -162,6 +162,12 @@ pub fn run_tui<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> Result<
                 KeyCode::Left => app.scroll_details_up(),    // Scroll details up
                 KeyCode::Right => app.scroll_details_down(),  // Scroll details down
                 KeyCode::Enter => {
+                    // Otherwise, submit search query if input is not empty
+                    if !app.input.value().is_empty() {
+                        return Ok(Some(app.input.value().to_string()));
+                    }
+                }
+                KeyCode::Char('o') if key.modifiers.contains(KeyModifiers::ALT) => {
                     // If we have results and something is selected, open it
                     if !app.results.is_empty() && app.list_state.selected().is_some() {
                         if let Some(repo) = app.get_selected_repo() {
@@ -169,16 +175,13 @@ pub fn run_tui<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> Result<
                                 return Ok(Some(url.to_string()));
                             }
                         }
-                    } else if !app.input.value().is_empty() {
-                        // Otherwise, submit search query if input is not empty
-                        return Ok(Some(app.input.value().to_string()));
                     }
                 }
                 KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::ALT) => {
                     // Alt+C to clear search input
                     app.input.reset();
                 }
-                KeyCode::Char('f') => {
+                KeyCode::Char('f') if key.modifiers.contains(KeyModifiers::ALT) => {
                     // Trigger file count for selected repo
                     if !app.results.is_empty() && app.list_state.selected().is_some() {
                         if let Some(repo) = app.get_selected_repo() {
@@ -431,10 +434,12 @@ pub fn ui(f: &mut Frame, app: &mut App) {
     let help_text = vec![
         Line::from(vec![
             Span::styled("Enter", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
-            Span::raw(": Search/Open  "),
+            Span::raw(": Search  "),
+            Span::styled("Alt+O", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
+            Span::raw(": Open  "),
             Span::styled("↑↓", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
             Span::raw(": Navigate  "),
-            Span::styled("f", Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD)),
+            Span::styled("Alt+F", Style::default().fg(Color::Magenta).add_modifier(Modifier::BOLD)),
             Span::raw(": Count  "),
             Span::styled("Alt+G", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
             Span::raw(": Clone  "),
